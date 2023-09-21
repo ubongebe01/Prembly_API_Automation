@@ -1,0 +1,591 @@
+{
+	"info": {
+		"_postman_id": "fb936bf8-35f0-40e6-a878-770343a7f38a",
+		"name": "Prembly_API_Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21187153"
+	},
+	"item": [
+		{
+			"name": "GetAllUsers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate the response code\"] = responseCode.code == 200;\r",
+							"\r",
+							"var response = JSON.parse(responseBody);\r",
+							"tests [ \"Response body has totalpage of 2\"]= response.total_pages = \"2\"\r",
+							"tests [ \"Response data content \"]= response.data[0].first_name = \"Michael\"\r",
+							"tests [ \"Response data content for another index position\"]= response.data[3].first_name == \"Byron\"\r",
+							"pm.test( \"check Content-Type Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header (\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test( \"check Transfer-Encoding Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header (\"Transfer-Encoding\", \"chunked\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 10000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response size is less than 4.0kb\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(4000);\r",
+							"\r",
+							"});\r",
+							"\r",
+							"postman.setNextRequest(\"GetASingleUser\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetASingleUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate reponse code\"] = responseCode.code == 200;\r",
+							"var response = JSON.parse (responseBody);\r",
+							"tests [\"validating  content of the responsebody\"] = response.data.last_name == \"Weaver\" \r",
+							"pm.test( \"check Content-Type Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header (\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetaSingleUSerNotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate the response code is 404\"] = responseCode.code == 404;\r",
+							"\r",
+							"pm.test(\"Response time is less than 700ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(700);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response size is less than 800 B\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(800);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users/23",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetaListofAllResources",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate the response code\"] = responseCode.code == 200;\r",
+							"\r",
+							"var response = JSON.parse(responseBody);\r",
+							"tests [ \"Response body has per_page value of 6\"]= response.per_page == \"6\"\r",
+							"tests [ \"Response body has 2000 at index 0\"]= response.data[0].year == 2000\r",
+							"tests [ \"Response body has fuchsia rose attached to the name at index number 1\"]= response.data[1].name == \"fuchsia rose\"\r",
+							"pm.test( \"check Content-Type Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header (\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"});\r",
+							"\r",
+							"pm.test( \"check Transfer-Encoding Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header (\"Transfer-Encoding\", \"chunked\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 300ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(300);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response size is less than 2.0kb\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(2000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/unknown",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetaSingleResource",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate that reponse code is 200\"] = responseCode.code == 200;\r",
+							"var response = JSON.parse (responseBody);\r",
+							"tests [\"validating  content of the responsebody\"] = response.data[0].color == \"#98B2D1\" \r",
+							"pm.test( \"check Content-Type Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header (\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/unknown",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetSingleResourceNotFound",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate the response code is 404\"] = responseCode.code == 404;\r",
+							"\r",
+							"pm.test(\"Response time is less than 700ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(700);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response size is less than 800 B\", function () {\r",
+							"    pm.expect(pm.response.responseSize).to.be.below(800);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/unknown/23",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"unknown",
+						"23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateaUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate reponse code\"] = responseCode.code == 200;\r",
+							"var response = JSON.parse (responseBody);\r",
+							"tests [\"validating  content of the responsebody\"] = response.job == \"Lead QA Enginner\"\r",
+							"pm.test( \"check Content-Type Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Ubong\",\r\n    \"job\": \"Lead QA Enginner\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateASingleUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate reponse code\"] = responseCode.code == 201;\r",
+							"var response = JSON.parse (responseBody);\r",
+							"tests [\"validating  content of the responsebody\"] = response.name == \"Ubong\"\r",
+							"pm.test( \"check Content-Type Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header (\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Ubong\",\r\n    \"job\": \"QA Lead\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PatchRequestForaUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate reponse code\"] = responseCode.code == 200;\r",
+							"var response = JSON.parse (responseBody);\r",
+							"tests [\"validating  content of the responsebody\"] = response.job == \"Lead QA Engineeer1 \"\r",
+							"pm.test( \"check Content-Type Header\", function ()\r",
+							"{\r",
+							"    pm.response.to.be.header(\"Content-Type\", \"application/json; charset=utf-8\");\r",
+							"\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Ubong\",\r\n    \"job\": \"Lead QA Engineeer1 \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate reponse code\"] = responseCode.code == 204;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/users/2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"users",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RegisterUserSuccessfully",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate the response code\"] = responseCode.code == 200;\r",
+							"\r",
+							"var response = JSON.parse(responseBody);\r",
+							"tests [ \"User Registration Token is Present\"]= response.token == \"QpwL5tke4Pnpja7X4\""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"pistol\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/register",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UnSuccessfulUserLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate the response code\"] = responseCode.code == 400;"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"peter@klaven\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/login",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SuccessfulUserLogin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests [\"validate the response code\"] = responseCode.code == 200;\r",
+							"\r",
+							"var response = JSON.parse(responseBody);\r",
+							"tests [ \"User Registration Token is Present\"]= response.token == \"QpwL5tke4Pnpja7X4\""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"eve.holt@reqres.in\",\r\n    \"password\": \"cityslicka\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://reqres.in/api/login",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
